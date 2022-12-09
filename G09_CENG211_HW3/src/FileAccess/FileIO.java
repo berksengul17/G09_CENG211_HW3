@@ -9,6 +9,12 @@ import java.util.StringTokenizer;
 
 public class FileIO {
 	
+	/**
+	 * Read the file in the given path
+	 * @return ArrayList<ArrayList<String>> containing the read lines
+	 * 			the inner ArrayList holds the data for each line and 
+	 * 			the outer ArrayList holds these lines
+	 */
 	public static ArrayList<ArrayList<String>> readFile(String filePath){
 		
 		ArrayList<ArrayList<String>> lines = new ArrayList<ArrayList<String>>();
