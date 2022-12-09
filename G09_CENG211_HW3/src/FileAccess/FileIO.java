@@ -26,7 +26,7 @@ public class FileIO {
 				lines.add(currLine);
 			}
 			
-			br.close();
+			br.close(); 
 			
 		} catch(FileNotFoundException e) {
 			System.err.format("Given file does not exist: %s", filePath);
