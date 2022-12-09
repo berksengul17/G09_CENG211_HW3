@@ -5,13 +5,33 @@ import FileAccess.FileIO;
 
 public class Vendor {
 	
-	private ArrayList<ArrayList<String>> materialList;
+	private ArrayList<Material> materialList;
 	
 	public Vendor() {
-		materialList = new ArrayList<ArrayList<String>>(FileIO.readFile("VendorPossessions.csv"));
+		this.materialList = createMaterialList();
 	}
 	
-	public ArrayList<ArrayList<String>> getMaterialList(){
-		return new ArrayList<ArrayList<String>>(materialList);
+	public ArrayList<Material> createMaterialList(){
+		ArrayList<Material> materialList = new ArrayList<Material>();
+		
+		ArrayList<ArrayList<String>> vendorPossessions = 
+				new ArrayList<ArrayList<String>>(FileIO.readFile("VendorPossessions.csv"));
+		
+		ArrayList<ArrayList<String>> materialProperties = 
+				new ArrayList<ArrayList<String>>(FileIO.readFile("RawMaterialProperties.csv"));
+		
+		for(ArrayList<String> possession : vendorPossessions) {
+			String materialCode = possession.get(0);
+			int quality = Integer.parseInt(possession.get(1));
+			for(ArrayList<String> property : materialProperties) {
+				int length = Integer.parseInt(property.get(1));
+				int width = Integer.parseInt(property.get(2));
+				int height = Integer.parseInt(property.get(3));
+				int cost = Integer.parseInt(property.get(4));			
+				materialList.add(new Material(materialCode, length, width, height, cost, quality));
+			}			
+		}
+		
+		return materialList;
 	}
 }

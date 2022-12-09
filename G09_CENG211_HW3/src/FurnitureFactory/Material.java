@@ -7,14 +7,16 @@ public class Material {
 	private int width;
 	private int height;
 	private int cost;
+	private int quality;
 	
 	
-	public Material(String materialCode, int length, int width, int height, int cost) {
+	public Material(String materialCode, int length, int width, int height, int cost, int quality) {
 		this.materialCode = materialCode;
 		this.length = length;
 		this.width = width;
 		this.height = height;
 		this.cost = cost;
+		this.quality = quality;
 	}
 	
 	public Material() {
@@ -23,14 +25,16 @@ public class Material {
 		this.width = -1;
 		this.height = -1;
 		this.cost = -1;
+		this.quality = -1;
 	}
 	
-	public Material(Material copy) {
-		this.materialCode = copy.materialCode;
-		this.length = copy.length;
-		this.width = copy.width;
-		this.height = copy.height;
-		this.cost = copy.cost;
+	public Material(Material aMaterial) {
+		this.materialCode = aMaterial.materialCode;
+		this.length = aMaterial.length;
+		this.width = aMaterial.width;
+		this.height = aMaterial.height;
+		this.cost = aMaterial.cost;
+		this.quality = aMaterial.quality;
 		
 	}
 	
