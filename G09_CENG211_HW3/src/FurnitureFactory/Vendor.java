@@ -1,22 +1,17 @@
 package FurnitureFactory;
 import java.util.ArrayList;
 
+import FileAccess.FileIO;
+
 public class Vendor {
-	private ArrayList<Material> materialList;
+	
+	private ArrayList<ArrayList<String>> materialList;
 	
 	public Vendor() {
-		this.materialList = null;
+		materialList = new ArrayList<ArrayList<String>>(FileIO.readFile("VendorPossessions.csv"));
 	}
 	
-	public Vendor(ArrayList<Material> theMaterialList) {
-		this.materialList = theMaterialList;
-	}
-	
-	public Vendor(Vendor aVendor) {
-		this.materialList = aVendor.materialList;
-	}
-	
-	public ArrayList<Material> getMaterialsList() {
-		return this.materialList;
+	public ArrayList<ArrayList<String>> getMaterialList(){
+		return new ArrayList<ArrayList<String>>(materialList);
 	}
 }
