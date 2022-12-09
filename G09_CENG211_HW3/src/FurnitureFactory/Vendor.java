@@ -16,7 +16,7 @@ public class Vendor {
 		this.materialList = aVendor.materialList;
 	}
 	
-	public ArrayList getMaterialsList() {
+	public ArrayList<Material> getMaterialsList() {
 		return this.materialList;
 	}
 }
