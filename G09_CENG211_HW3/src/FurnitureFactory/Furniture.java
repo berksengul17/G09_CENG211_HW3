@@ -5,7 +5,6 @@ public abstract class Furniture {
 	private String furnitureCode;
 	private int cost;
 	private int quality;
-	//private int income;
 	
 	public Furniture() {
 		this.furnitureCode = "N/A";
