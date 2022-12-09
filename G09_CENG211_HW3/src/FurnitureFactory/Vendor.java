@@ -24,14 +24,20 @@ public class Vendor {
 			String materialCode = possession.get(0);
 			int quality = Integer.parseInt(possession.get(1));
 			for(ArrayList<String> property : materialProperties) {
-				int length = Integer.parseInt(property.get(1));
-				int width = Integer.parseInt(property.get(2));
-				int height = Integer.parseInt(property.get(3));
-				int cost = Integer.parseInt(property.get(4));			
-				materialList.add(new Material(materialCode, length, width, height, cost, quality));
+				if(property.get(0).equals(materialCode)) {					
+					int length = Integer.parseInt(property.get(1));
+					int width = Integer.parseInt(property.get(2));
+					int height = Integer.parseInt(property.get(3));
+					int cost = Integer.parseInt(property.get(4));			
+					materialList.add(new Material(materialCode, length, width, height, cost, quality));
+				}
 			}			
 		}
 		
 		return materialList;
+	}
+	
+	public ArrayList<Material> getMaterialList(){
+		return new ArrayList<Material>(materialList);
 	}
 }

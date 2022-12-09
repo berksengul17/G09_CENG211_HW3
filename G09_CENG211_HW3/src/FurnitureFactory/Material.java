@@ -78,7 +78,14 @@ public class Material {
 		this.cost = cost;
 	}
 
-	
-	
+	@Override
+	public String toString() {
+		return String.format("Material code:%s "
+				+ "Length:%d "
+				+ "Width:%d "
+				+ "Height:%d "
+				+ "Cost:%d "
+				+ "Quality:%d", materialCode, length, width, height, cost, quality);
+	}
 	
 }
