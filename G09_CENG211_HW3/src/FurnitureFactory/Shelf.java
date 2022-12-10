@@ -10,4 +10,10 @@ public class Shelf extends Furniture{
 		return 0;
 	}
 
+	@Override
+	public int calculateQuality() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

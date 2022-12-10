@@ -1,5 +1,7 @@
 package FurnitureFactory;
 
+import java.util.ArrayList;
+
 public abstract class Furniture {
 	
 	private String furnitureCode;
@@ -35,7 +37,20 @@ public abstract class Furniture {
 	public int getQuality() {
 		return quality;
 	}
+	
+	public int calculateCost() {
+		ArrayList<String> parts = FurnitureParts.valueOf(furnitureCode).getParts();
+		
+		int cost = 0;
+		for(int i=0; i<parts.size()-1; i++) {
+			
+		}
+		
+		
+	}
 
 	public abstract int calculateIncome();
+	
+	public abstract int calculateQuality();
 	
 }

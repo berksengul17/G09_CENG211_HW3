@@ -9,5 +9,11 @@ public class Wardrobe extends Furniture{
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
+	@Override
+	public int calculateQuality() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 }
