@@ -4,16 +4,12 @@ public class Wardrobe extends Furniture{
 
 	private static final int INCOME_PERCENTAGE = 280;
 
-	@Override
-	public int calculateIncome() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int calculateQuality() {
-		// TODO Auto-generated method stub
-		return 0;
+	public Wardrobe(String code, String name) {
+		super(code, name);
 	}
 	
+	@Override
+	public int calculateIncome() {
+		return getCost() * INCOME_PERCENTAGE / 100;
+	}
 }

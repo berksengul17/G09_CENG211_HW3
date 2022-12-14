@@ -6,38 +6,55 @@ import FileAccess.FileIO;
 
 public enum FurnitureParts {
 	
-	TB1401("TB1401"),
-	TB1402("TB1402"),
-	TB1501("TB1501"),
-	TB1502("TB1502"),
-	TB1503("TB1503"),
-	WD2201("WD2201"),
-	WD2202("WD2202"),
-	WD2203("WD2203"),
-	SH5001("SH5001"),
-	SH5002("SH5002"),
-	SH5003("SH5003"),
-	SH5101("SH5101");
+	TB1401("TB1401", "Obsidian"),
+	TB1402("TB1402", "Pearl"),
+	TB1501("TB1501", "Elegant"),
+	TB1502("TB1502", "Walnut"),
+	TB1503("TB1503", "Garden"),
+	WD2201("WD2201", "Lavinia"),
+	WD2202("WD2202", "Loki"),
+	WD2203("WD2203", "Atlas"),
+	SH5001("SH5001", "Corner"),
+	SH5002("SH5002", "Harmony"),
+	SH5003("SH5003", "Luna"),
+	SH5101("SH5101", "Hittite");
 	
-	ArrayList<String> parts;
+	ArrayList<String[]> parts;
+	String materialCode;
+	String furnitureName;
 	
-	FurnitureParts(String materialCode) {
-		parts = getFurniturePartsByCode(materialCode);
+	FurnitureParts(String materialCode, String furnitureName) {
+		this.materialCode = materialCode;
+		this.furnitureName = furnitureName;
+		this.parts = getFurniturePartsByCode(materialCode);
 	}
 	
-	public ArrayList<String> getParts(){
-		return new ArrayList<String>(parts);
+	public String getCode() {
+		return this.materialCode;
 	}
 
-	ArrayList<String> getFurniturePartsByCode(String materialCode) {		
+	public String getName() {
+		return this.furnitureName;
+	}
+	
+	public ArrayList<String[]> getParts(){
+		return new ArrayList<String[]>(parts);
+	}
+	
+
+	ArrayList<String[]> getFurniturePartsByCode(String materialCode) {		
 		ArrayList<ArrayList<String>> furnitureParts = FileIO.readFile("FurnitureParts.csv");
-		ArrayList<String> blueprint = null;
+		ArrayList<String[]> blueprint = new ArrayList<String[]>();
 		
 		for(ArrayList<String> furniturePart : furnitureParts) {
+			String[] part = new String[2];
 			String currCode = furniturePart.get(0);
-			if(materialCode.equals(currCode)) {
-				furniturePart.remove(currCode);
-				blueprint = furniturePart;
+			for(int i=1; i<furniturePart.size()-1; i+=2) {
+				if(materialCode.equals(currCode)) {
+					part[0] = furniturePart.get(i);
+					part[1] = furniturePart.get(i+1);
+					blueprint.add(part);
+				}
 			}
 		}
 		

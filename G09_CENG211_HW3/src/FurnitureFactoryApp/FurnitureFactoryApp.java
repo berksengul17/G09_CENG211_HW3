@@ -1,13 +1,11 @@
 package FurnitureFactoryApp;
 
-import java.util.ArrayList;
-
-import FurnitureFactory.Material;
-import FurnitureFactory.Vendor;
+import FurnitureFactory.Day;
 
 public class FurnitureFactoryApp {
 	public static void main(String[] args) {
 		
+		/*
 		Vendor vendor = new Vendor();
 		
 		ArrayList<Material> materialList = vendor.getMaterialList();
@@ -17,6 +15,9 @@ public class FurnitureFactoryApp {
 			System.out.println(material);
 		}
 		
-		System.out.println(materialList.size());
+		System.out.println(materialList.size());*/
+		
+		Day day = new Day(1);
+		day.simulateDay();
 	}
 }

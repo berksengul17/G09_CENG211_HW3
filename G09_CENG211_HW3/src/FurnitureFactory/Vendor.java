@@ -6,8 +6,10 @@ import FileAccess.FileIO;
 public class Vendor {
 	
 	private ArrayList<Material> materialList;
+	private ArrayList<ArrayList<String>> materialProperties;
 	
 	public Vendor() {
+		this.materialProperties = FileIO.readFile("RawMaterialProperties.csv");
 		this.materialList = createMaterialList();
 	}
 	
@@ -17,21 +19,10 @@ public class Vendor {
 		ArrayList<ArrayList<String>> vendorPossessions = 
 				new ArrayList<ArrayList<String>>(FileIO.readFile("VendorPossessions.csv"));
 		
-		ArrayList<ArrayList<String>> materialProperties = 
-				new ArrayList<ArrayList<String>>(FileIO.readFile("RawMaterialProperties.csv"));
-		
 		for(ArrayList<String> possession : vendorPossessions) {
-			String materialCode = possession.get(0);
-			int quality = Integer.parseInt(possession.get(1));
-			for(ArrayList<String> property : materialProperties) {
-				if(property.get(0).equals(materialCode)) {					
-					int length = Integer.parseInt(property.get(1));
-					int width = Integer.parseInt(property.get(2));
-					int height = Integer.parseInt(property.get(3));
-					int cost = Integer.parseInt(property.get(4));			
-					materialList.add(new Material(materialCode, length, width, height, cost, quality));
-				}
-			}			
+			Material material = FileIO.getMaterialByCode(possession.get(0));
+			material.setQuality(Integer.parseInt(possession.get(1)));
+			materialList.add(material);		
 		}
 		
 		return materialList;
@@ -40,4 +31,27 @@ public class Vendor {
 	public ArrayList<Material> getMaterialList(){
 		return new ArrayList<Material>(materialList);
 	}
+	
+	public ArrayList<Material> buy(String materialCode, int amount) {
+		
+		ArrayList<Material> copyMaterialList = new ArrayList<>(materialList);
+		ArrayList<Material> order = new ArrayList<Material>();
+		
+		int amountBuyed = 0;
+		for(Material material : copyMaterialList) {
+			if(material.getCode().equals(materialCode) && amountBuyed < amount) {
+				materialList.remove(material);
+				order.add(new Material(material));
+				amountBuyed++;
+			}
+		}
+		
+		return order;
+	}
+	
+	
+	
+	
+	
+	
 }

@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
+import FurnitureFactory.Material;
+
 public class FileIO {
 	
 	/**
@@ -41,6 +43,30 @@ public class FileIO {
 		}
 		
 		return lines;
+	}
+		
+	public static Material getMaterialByCode(String materialcode) {
+		
+		ArrayList<ArrayList<String>> properties = readFile("RawMaterialProperties.csv");
+		
+		Material desiredMaterial = null;
+		
+		for(ArrayList<String> materialInfo : properties ) {
+			if(materialcode.equals(materialInfo.get(0))) {
+				
+				String code = materialInfo.get(0);
+				int length = Integer.parseInt(materialInfo.get(1));
+				int width = Integer.parseInt(materialInfo.get(2));
+				int height = Integer.parseInt(materialInfo.get(3));
+				int cost = Integer.parseInt(materialInfo.get(4));
+				
+				desiredMaterial = new Material(code, length, width, height, cost);
+			}
+			
+		}
+		
+		return desiredMaterial;
+
 	}
 }
  

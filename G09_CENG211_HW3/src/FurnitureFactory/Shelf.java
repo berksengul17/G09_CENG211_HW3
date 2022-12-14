@@ -3,17 +3,13 @@ package FurnitureFactory;
 public class Shelf extends Furniture{
 
 	private static final int INCOME_PERCENTAGE = 320;
-
+	
+	public Shelf(String code, String name) {
+		super(code, name);
+	}
+	
 	@Override
 	public int calculateIncome() {
-		// TODO Auto-generated method stub
-		return 0;
+		return getCost() * INCOME_PERCENTAGE / 100;
 	}
-
-	@Override
-	public int calculateQuality() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
 }

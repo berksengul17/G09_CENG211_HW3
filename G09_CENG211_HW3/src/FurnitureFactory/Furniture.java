@@ -2,32 +2,42 @@ package FurnitureFactory;
 
 import java.util.ArrayList;
 
+import FileAccess.FileIO;
+
 public abstract class Furniture {
 	
-	private String furnitureCode;
+	private String code;
+	private String name;
 	private int cost;
 	private int quality;
 	
 	public Furniture() {
-		this.furnitureCode = "N/A";
+		this.code = "N/A";
+		this.name = "N/A";
 		this.cost = -1;
 		this.quality = -1;
 	}
 	
 	public Furniture(Furniture furniture) {
-		this.furnitureCode = furniture.furnitureCode;
+		this.code = furniture.code;
+		this.name = furniture.name;
 		this.cost = furniture.cost;
 		this.quality = furniture.quality;
 	}
 	
-	public Furniture(String furnitureCode, int cost, int quality) {
-		this.furnitureCode = furnitureCode;
-		this.cost = cost;
-		this.quality = quality;
+	public Furniture(String code, String name) {
+		this.code = code;
+		this.name = name;
+		this.cost = calculateCost();
+		this.quality = calculateQuality();
 	}
 	
 	public String getFurnitureCode() {
-		return furnitureCode;
+		return code;
+	}
+	
+	public String getName() {
+		return name;
 	}
 
 	public int getCost() {
@@ -38,19 +48,37 @@ public abstract class Furniture {
 		return quality;
 	}
 	
-	public int calculateCost() {
-		ArrayList<String> parts = FurnitureParts.valueOf(furnitureCode).getParts();
+	private int calculateCost() {
+		ArrayList<String[]> parts = FurnitureParts.valueOf(code).getParts();
 		
-		int cost = 0;
-		for(int i=0; i<parts.size()-1; i++) {
-			
+		int totalCost = 0;
+		for(String[] part : parts) {
+			Material material = FileIO.getMaterialByCode(part[0]);
+			int amount = Integer.parseInt(part[1]);
+			totalCost += material.getCost() * amount;;
 		}
 		
+		return totalCost;
 		
 	}
 
+	private int calculateQuality() {
+		ArrayList<String[]> parts = FurnitureParts.valueOf(code).getParts();
+		
+		int sum = 0;
+		int totalVolume = 0;
+		for(String[] part : parts) {
+			Material material = FileIO.getMaterialByCode(part[0]);
+			int volume = Integer.parseInt(part[1]);
+			
+			sum += material.getQuality() * volume;
+			totalVolume += volume;
+		}
+		
+		return sum / totalVolume;
+	}
+	
 	public abstract int calculateIncome();
 	
-	public abstract int calculateQuality();
 	
 }

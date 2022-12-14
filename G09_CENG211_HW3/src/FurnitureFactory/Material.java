@@ -9,6 +9,14 @@ public class Material {
 	private int cost;
 	private int quality;
 	
+	public Material() {
+		this.materialCode = null;
+		this.length = -1;
+		this.width = -1;
+		this.height = -1;
+		this.cost = -1;
+		this.quality = -1;
+	}
 	
 	public Material(String materialCode, int length, int width, int height, int cost, int quality) {
 		this.materialCode = materialCode;
@@ -19,13 +27,12 @@ public class Material {
 		this.quality = quality;
 	}
 	
-	public Material() {
-		this.materialCode = null;
-		this.length = -1;
-		this.width = -1;
-		this.height = -1;
-		this.cost = -1;
-		this.quality = -1;
+	public Material(String materialCode, int length, int width, int height, int cost) {
+		this.materialCode = materialCode;
+		this.length = length;
+		this.width = width;
+		this.height = height;
+		this.cost = cost;
 	}
 	
 	public Material(Material aMaterial) {
@@ -38,11 +45,11 @@ public class Material {
 		
 	}
 	
-	public String getMaterialCode() {
+	public String getCode() {
 		return materialCode;
 	}
 
-	public void setMaterialCode(String materialCode) {
+	public void setCode(String materialCode) {
 		this.materialCode = materialCode;
 	}
 
@@ -76,6 +83,14 @@ public class Material {
 
 	public void setCost(int cost) {
 		this.cost = cost;
+	}
+	
+	public int getQuality() {
+		return quality;
+	}
+	
+	public void setQuality(int quality) {
+		this.quality = quality;
 	}
 
 	@Override

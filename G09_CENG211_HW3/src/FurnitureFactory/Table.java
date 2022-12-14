@@ -4,16 +4,12 @@ public class Table extends Furniture{
 	
 	private static final int INCOME_PERCENTAGE = 300;
 
-	@Override
-	public int calculateIncome() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int calculateQuality() {
-		// TODO Auto-generated method stub
-		return 0;
+	public Table(String code, String name) {
+		super(code, name);
 	}
 	
+	@Override
+	public int calculateIncome() {
+		return getCost() * INCOME_PERCENTAGE / 100;
+	}
 }
