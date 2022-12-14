@@ -9,81 +9,11 @@ public class Manufacturer1 extends Manufacturer{
 
 	private ArrayList<ArrayList<String>> furnitureList;
 	private ArrayList<ArrayList<String>> materialList;
-	private ArrayList<ArrayList<Material>> ownedMaterials;
-	private ArrayList<Furniture> producedFurnitures;
-	private ArrayList<String[]> unproducedFurnitures;
 	
 	public Manufacturer1() {
+		super();
 		this.furnitureList = FileIO.readFile("Manufacturer1Furnitures.csv");
 		this.materialList = FileIO.readFile("Manufacturer1Materials.csv");
-		this.ownedMaterials = new ArrayList<ArrayList<Material>>();
-		this.producedFurnitures = new ArrayList<Furniture>();
-		this.unproducedFurnitures = new ArrayList<String[]>();
-	}
-	
-	
-	public void setOwnedMaterialList(ArrayList<ArrayList<Material>> materialList) {
-		
-		this.ownedMaterials = new ArrayList<ArrayList<Material>>(materialList);
-	}
-	
-	public ArrayList<ArrayList<Furniture>> getProducedFurnitures(){
-		
-		int index = 0;
-		
-		ArrayList<String> groupNames = new ArrayList<String>();
-		
-		ArrayList<ArrayList<Furniture>> groupedProducedFurnitures = 
-				new ArrayList<ArrayList<Furniture>>();
-		
-		while(index < producedFurnitures.size()) {
-			
-			ArrayList<Furniture> group = new ArrayList<>();
-			group.add(producedFurnitures.get(index));
-			
-			if(!groupNames.contains(producedFurnitures.get(index).getName())) {
-				for(int i=index+1; i<producedFurnitures.size(); i++) {
-					Furniture temp = group.get(0);
-					Furniture currFurniture = producedFurnitures.get(i);
-					if(temp.getName().equals(currFurniture.getName())) {
-						group.add(producedFurnitures.get(i));
-					}
-				}
-				
-				groupedProducedFurnitures.add(group);
-				
-				groupNames.add(producedFurnitures.get(index).getName());
-			}
-			
-			
-			index++;
-			
-		}
-		
-		return groupedProducedFurnitures;
-		
-		
-		/*ArrayList<ArrayList<Furniture>> groupedProducedFurnitures = 
-				new ArrayList<ArrayList<Furniture>>();
-		
-		for(Furniture furniture : producedFurnitures) {
-			for(ArrayList<Furniture> group : groupedProducedFurnitures) {
-				String groupName = group.get(0).getName();
-				if(furniture.getName().equals(groupName)) {
-					group.add(furniture);
-				} else {
-					ArrayList<Furniture> newGroup = new ArrayList<Furniture>();
-					newGroup.add(furniture);
-					groupedProducedFurnitures.add(newGroup);
-				}
-			}
-		}
-		
-		return groupedProducedFurnitures;*/
-	}
-	
-	public ArrayList<String[]> getUnproducedFurnitures(){
-		return new ArrayList<String[]>(unproducedFurnitures);
 	}
 
 	public void buyMaterials(Vendor vendor, int dayValue) {
@@ -99,7 +29,7 @@ public class Manufacturer1 extends Manufacturer{
 			ownedMaterials.add(order);
 		}
 		
-		setOwnedMaterialList(ownedMaterials);
+		super.setOwnedMaterialList(ownedMaterials);
 	}
 	
 	
@@ -112,9 +42,9 @@ public class Manufacturer1 extends Manufacturer{
 			int amountToProduce = Integer.parseInt(order[1]);
 			int amountProduced = 0;
 			for(int i=0; i<amountToProduce; i++) {	
-				Furniture producedFurniture = produce(order[0], dayValue);
+				Furniture producedFurniture = produce(order[0]);
 				if(producedFurniture != null) {
-					producedFurnitures.add(producedFurniture);
+					addToProducedFurnitures(producedFurniture);
 					amountProduced++;
 				}
 			}
@@ -125,7 +55,7 @@ public class Manufacturer1 extends Manufacturer{
 			if(Integer.parseInt(order[1]) == 0)
 				furnituresToProduce.pop();
 			else {
-				unproducedFurnitures.add(order);
+				addToUnproducedFurnitures(order);
 				furnituresToProduce.pop();					
 			}
 			
@@ -138,14 +68,14 @@ public class Manufacturer1 extends Manufacturer{
 		ArrayList<String> orders = furnitureList.get(dayValue-1);
 		
 		// if there are unproduced furnitures add to the stack 
-		for(String[] unProducedFurniture : unproducedFurnitures) {
+		for(String[] unProducedFurniture : getUnproducedFurnitures()) {
 			furnituresToProduce.add(unProducedFurniture);
 		}
 		
 		// clear the arraylist to store the current day's unproduced furnitures
-		unproducedFurnitures.clear();
-		producedFurnitures.clear();
-		
+		setUnproducedFurnitures(new ArrayList<String[]>());
+		setProducedFurnitures(new ArrayList<Furniture>());
+				
 		// Start from 1 to skip day count
 		for(int i=1; i<orders.size()-1; i+=2) {			
 			String[] order = new String[2];
@@ -157,56 +87,35 @@ public class Manufacturer1 extends Manufacturer{
 		return furnituresToProduce;
 	}
 	
-	private Furniture produce(String order, int dayValue) {
+	private Furniture produce(String order) {
 		
 		// dayValue-1 because index count starts from 0 
 		FurnitureParts furniture = FurnitureParts.valueOf(order);
 		
 		ArrayList<String[]> parts = furniture.getParts();
 
+		ArrayList<ArrayList<Material>> totalConsumedMaterials = new ArrayList<>();
+		
 		for(String[] part : parts) {
 			String partCode = part[0];
 			int amountNeeded = Integer.parseInt(part[1]);
 			// LIFO
-			for(ArrayList<Material> materials : ownedMaterials) {
+			for(ArrayList<Material> materials : getOwnedMaterials()) {
 				if(materials.size() != 0) {
 					Material material = materials.get(0);
 					if(material.getCode().equals(partCode)) {
-						if(!consumeMaterial(materials, amountNeeded))
-							return null;
+						ArrayList<Material> consumedMaterials = 
+								consumeMaterial(materials, amountNeeded);
+						if(consumedMaterials != null)
+							totalConsumedMaterials.add(consumedMaterials);
+						
+						else return null;
 					}
 				}
 			}
 		}
 		
-		return createFurniture(furniture.getCode(), furniture.getName());
+		return createFurniture(furniture.getCode(), furniture.getName(), totalConsumedMaterials);
 		
-	}
-	
-	private boolean consumeMaterial(ArrayList<Material> materials, int amountNeeded) {
-		
-		if(materials.size() < amountNeeded) return false;
-		
-		else {
-			int amountConsumed = 0;
-			while(amountConsumed < amountNeeded) {
-				// Remove from the last index
-				materials.remove(materials.size()-1);
-				amountConsumed++;
-			}
-			
-			return true;
-		}
-		
-	}
-	
-	private Furniture createFurniture(String furnitureCode, String furnitureName) {
-		
-		if(furnitureCode.startsWith("TB")) 
-			return new Table(furnitureCode, furnitureName);
-		else if(furnitureCode.startsWith("WD")) 
-			return new Wardrobe(furnitureCode, furnitureName);
-		else
-			return new Shelf(furnitureCode, furnitureName);
 	}
 }

@@ -6,10 +6,8 @@ import FileAccess.FileIO;
 public class Vendor {
 	
 	private ArrayList<Material> materialList;
-	private ArrayList<ArrayList<String>> materialProperties;
 	
 	public Vendor() {
-		this.materialProperties = FileIO.readFile("RawMaterialProperties.csv");
 		this.materialList = createMaterialList();
 	}
 	
@@ -48,10 +46,5 @@ public class Vendor {
 		
 		return order;
 	}
-	
-	
-	
-	
-	
 	
 }

@@ -10,10 +10,12 @@ public abstract class Furniture {
 	private String name;
 	private int cost;
 	private int quality;
+	private ArrayList<ArrayList<Material>> materialList;
 	
 	public Furniture() {
 		this.code = "N/A";
 		this.name = "N/A";
+		this.materialList = new ArrayList<ArrayList<Material>>();
 		this.cost = -1;
 		this.quality = -1;
 	}
@@ -21,13 +23,15 @@ public abstract class Furniture {
 	public Furniture(Furniture furniture) {
 		this.code = furniture.code;
 		this.name = furniture.name;
+		this.materialList = new ArrayList<ArrayList<Material>>(furniture.materialList);
 		this.cost = furniture.cost;
 		this.quality = furniture.quality;
 	}
 	
-	public Furniture(String code, String name) {
+	public Furniture(String code, String name, ArrayList<ArrayList<Material>> materialList) {
 		this.code = code;
 		this.name = name;
+		this.materialList = new ArrayList<ArrayList<Material>>(materialList);
 		this.cost = calculateCost();
 		this.quality = calculateQuality();
 	}
@@ -48,6 +52,8 @@ public abstract class Furniture {
 		return quality;
 	}
 	
+	public abstract int calculateIncome();
+	
 	private int calculateCost() {
 		ArrayList<String[]> parts = FurnitureParts.valueOf(code).getParts();
 		
@@ -63,22 +69,21 @@ public abstract class Furniture {
 	}
 
 	private int calculateQuality() {
-		ArrayList<String[]> parts = FurnitureParts.valueOf(code).getParts();
 		
-		int sum = 0;
+		int totalQuality = 0;
 		int totalVolume = 0;
-		for(String[] part : parts) {
-			Material material = FileIO.getMaterialByCode(part[0]);
-			int volume = Integer.parseInt(part[1]);
-			
-			sum += material.getQuality() * volume;
-			totalVolume += volume;
+
+		for(ArrayList<Material> materials : materialList) {
+			for(Material material : materials) {
+				int quality = material.getQuality();
+				int volume = material.getHeight() * material.getLength() * material.getWidth();
+				totalVolume += volume;
+				totalQuality += quality * volume;
+				
+			}
 		}
 		
-		return sum / totalVolume;
+		return totalQuality / totalVolume;
 	}
-	
-	public abstract int calculateIncome();
-	
 	
 }

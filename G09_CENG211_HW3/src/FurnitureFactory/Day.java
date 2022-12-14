@@ -10,7 +10,6 @@ public class Day {
 	private Vendor vendor;
 	private Manufacturer1 manufacturer1;
 	private Manufacturer2 manufacturer2;
-	private Locale locale;
 	private NumberFormat formatter;
 	
 	public Day(int dayValue) {
@@ -18,37 +17,37 @@ public class Day {
 		this.vendor = new Vendor();
 		this.manufacturer1 = new Manufacturer1();
 		this.manufacturer2 = new Manufacturer2();
-		this.locale = new Locale.Builder().setLanguage("tr").setRegion("TR").build();
-		this.formatter = NumberFormat.getCurrencyInstance(locale);
+		this.formatter = NumberFormat.getCurrencyInstance(Locale.US);
 	}
 	
 	public void simulateDay() {
 		
 		manufacturer1.buyMaterials(vendor, dayValue);
 		manufacturer1.produceFurnitures(dayValue);
-		//manufacturer2.buyMaterials(vendor, dayValue );
+		
+		manufacturer2.buyMaterials(vendor, dayValue);
+		manufacturer2.produceFurnitures(dayValue);
 		
 		System.out.println("Day" + dayValue + ":");
 		System.out.println("Manufacturer1:");
 		
 		ArrayList<ArrayList<Furniture>> manufacturer1FurnituresProduced = 
-				manufacturer1.getProducedFurnitures();
+				manufacturer1.getGroupedProducedFurnitures();
 		
 		ArrayList<String[]> manufacturer1FurnituresUnproduced =
 				manufacturer1.getUnproducedFurnitures();
 		
 		printOutput(manufacturer1FurnituresProduced, manufacturer1FurnituresUnproduced);
 		
-		/*
 		System.out.println("Manufacturer2:");
 				
 		ArrayList<ArrayList<Furniture>> manufacturer2FurnituresProduced = 
-				manufacturer2.getProducedFurnituresByGivenDay(dayValue);
+				manufacturer2.getGroupedProducedFurnitures();
 		
-		ArrayList<ArrayList<Furniture>> manufacturer2FurnituresUnproduced =
-				manufacturer2.getUnproducedFurnituresForGivenDay(dayValue);
+		ArrayList<String[]> manufacturer2FurnituresUnproduced =
+				manufacturer2.getUnproducedFurnitures();
 		
-		printOutput(manufacturer2FurnituresProduced, manufacturer2FurnituresUnproduced);*/
+		printOutput(manufacturer2FurnituresProduced, manufacturer2FurnituresUnproduced);
 		
 	}
 	
@@ -89,7 +88,6 @@ public class Day {
 		
 		for(ArrayList<Furniture> furnitureGroup : producedFurnitures) {
 			for(Furniture furniture : furnitureGroup) {
-				//totalExpense += furniure.getCost();
 				totalExpense += furniture.getCost();
 				totalIncome += furniture.calculateIncome();
 			}
