@@ -28,7 +28,42 @@ public class Manufacturer1 extends Manufacturer{
 	}
 	
 	public ArrayList<ArrayList<Furniture>> getProducedFurnitures(){
+		
+		int index = 0;
+		
+		ArrayList<String> groupNames = new ArrayList<String>();
+		
 		ArrayList<ArrayList<Furniture>> groupedProducedFurnitures = 
+				new ArrayList<ArrayList<Furniture>>();
+		
+		while(index < producedFurnitures.size()) {
+			
+			ArrayList<Furniture> group = new ArrayList<>();
+			group.add(producedFurnitures.get(index));
+			
+			if(!groupNames.contains(producedFurnitures.get(index).getName())) {
+				for(int i=index+1; i<producedFurnitures.size(); i++) {
+					Furniture temp = group.get(0);
+					Furniture currFurniture = producedFurnitures.get(i);
+					if(temp.getName().equals(currFurniture.getName())) {
+						group.add(producedFurnitures.get(i));
+					}
+				}
+				
+				groupedProducedFurnitures.add(group);
+				
+				groupNames.add(producedFurnitures.get(index).getName());
+			}
+			
+			
+			index++;
+			
+		}
+		
+		return groupedProducedFurnitures;
+		
+		
+		/*ArrayList<ArrayList<Furniture>> groupedProducedFurnitures = 
 				new ArrayList<ArrayList<Furniture>>();
 		
 		for(Furniture furniture : producedFurnitures) {
@@ -39,11 +74,12 @@ public class Manufacturer1 extends Manufacturer{
 				} else {
 					ArrayList<Furniture> newGroup = new ArrayList<Furniture>();
 					newGroup.add(furniture);
+					groupedProducedFurnitures.add(newGroup);
 				}
 			}
 		}
 		
-		return groupedProducedFurnitures;
+		return groupedProducedFurnitures;*/
 	}
 	
 	public ArrayList<String[]> getUnproducedFurnitures(){
@@ -70,10 +106,9 @@ public class Manufacturer1 extends Manufacturer{
 	public void produceFurnitures(int dayValue) {
 
 		Stack<String[]> furnituresToProduce = initializeOrders(dayValue);
-		String[] order;
 		
 		while(!furnituresToProduce.isEmpty()) {
-			order = furnituresToProduce.peek();
+			String[] order = furnituresToProduce.peek();
 			int amountToProduce = Integer.parseInt(order[1]);
 			int amountProduced = 0;
 			for(int i=0; i<amountToProduce; i++) {	
@@ -89,8 +124,10 @@ public class Manufacturer1 extends Manufacturer{
 			// If all the furnitures are produced pop the order
 			if(Integer.parseInt(order[1]) == 0)
 				furnituresToProduce.pop();
-			else
+			else {
 				unproducedFurnitures.add(order);
+				furnituresToProduce.pop();					
+			}
 			
 		}
 	}
@@ -110,12 +147,10 @@ public class Manufacturer1 extends Manufacturer{
 		producedFurnitures.clear();
 		
 		// Start from 1 to skip day count
-		String[] order = new String[2];
-		for(int i=1; i<orders.size()-1; i+=2) {
-			
+		for(int i=1; i<orders.size()-1; i+=2) {			
+			String[] order = new String[2];
 			order[0] = orders.get(i);
 			order[1] = orders.get(i+1);
-			System.out.println(order[0] + " " + order[1]);
 			furnituresToProduce.add(order);
 		}
 		
@@ -125,7 +160,6 @@ public class Manufacturer1 extends Manufacturer{
 	private Furniture produce(String order, int dayValue) {
 		
 		// dayValue-1 because index count starts from 0 
-		System.out.println("ORDER " + order);
 		FurnitureParts furniture = FurnitureParts.valueOf(order);
 		
 		ArrayList<String[]> parts = furniture.getParts();

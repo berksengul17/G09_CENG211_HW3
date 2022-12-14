@@ -17,7 +17,9 @@ public class FurnitureFactoryApp {
 		
 		System.out.println(materialList.size());*/
 		
-		Day day = new Day(1);
-		day.simulateDay();
+		for(int i=1; i<4; i++) {
+			Day day = new Day(i);
+			day.simulateDay();
+		}
 	}
 }

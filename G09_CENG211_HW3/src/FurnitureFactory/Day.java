@@ -74,6 +74,7 @@ public class Day {
 					badQltCount, normalQltCount, goodQltCount,
 					veryGoodQltCount, perfectQltCount, formatter.format(income));
 			
+			System.out.println();
 		}
 		
 		printTotalExpenseAndIncome(producedFurnitures);
@@ -111,6 +112,7 @@ public class Day {
 				String furnitureName = unproducedFurniture[0];
 				System.out.print(amountUnproduced + " " + furnitureName);
 				if(index != unproducedFurnitures.size()-1) System.out.print(", ");
+				else System.out.println();
 			}
 		}
 	}
