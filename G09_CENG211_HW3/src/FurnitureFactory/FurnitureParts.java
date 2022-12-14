@@ -47,10 +47,10 @@ public enum FurnitureParts {
 		ArrayList<String[]> blueprint = new ArrayList<String[]>();
 		
 		for(ArrayList<String> furniturePart : furnitureParts) {
-			String[] part = new String[2];
 			String currCode = furniturePart.get(0);
 			for(int i=1; i<furniturePart.size()-1; i+=2) {
 				if(materialCode.equals(currCode)) {
+					String[] part = new String[2];
 					part[0] = furniturePart.get(i);
 					part[1] = furniturePart.get(i+1);
 					blueprint.add(part);

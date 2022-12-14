@@ -75,15 +75,16 @@ public class Manufacturer1 extends Manufacturer{
 		while(!furnituresToProduce.isEmpty()) {
 			order = furnituresToProduce.peek();
 			int amountToProduce = Integer.parseInt(order[1]);
+			int amountProduced = 0;
 			for(int i=0; i<amountToProduce; i++) {	
 				Furniture producedFurniture = produce(order[0], dayValue);
 				if(producedFurniture != null) {
 					producedFurnitures.add(producedFurniture);
-					amountToProduce--;
+					amountProduced++;
 				}
 			}
 			
-			order[1] = Integer.toString(amountToProduce);
+			order[1] = Integer.toString(amountToProduce-amountProduced);
 			
 			// If all the furnitures are produced pop the order
 			if(Integer.parseInt(order[1]) == 0)
@@ -124,21 +125,22 @@ public class Manufacturer1 extends Manufacturer{
 	private Furniture produce(String order, int dayValue) {
 		
 		// dayValue-1 because index count starts from 0 
-		
+		System.out.println("ORDER " + order);
 		FurnitureParts furniture = FurnitureParts.valueOf(order);
 		
 		ArrayList<String[]> parts = furniture.getParts();
-				
+
 		for(String[] part : parts) {
 			String partCode = part[0];
 			int amountNeeded = Integer.parseInt(part[1]);
 			// LIFO
 			for(ArrayList<Material> materials : ownedMaterials) {
-				Material material = materials.get(0);
-				//System.out.println(material.getCode());
-				if(material.getCode().equals(partCode)) {
-					if(!consumeMaterial(materials, amountNeeded))
-						return null;
+				if(materials.size() != 0) {
+					Material material = materials.get(0);
+					if(material.getCode().equals(partCode)) {
+						if(!consumeMaterial(materials, amountNeeded))
+							return null;
+					}
 				}
 			}
 		}
